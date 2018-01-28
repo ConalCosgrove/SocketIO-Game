@@ -1,0 +1,128 @@
+<canvas id="c" width = "500" height = "500"></canvas>
+<script src="/socket.io/socket.io.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+<script>
+$(function () {
+	var me;
+	var playercolors = ['#2ecc71','#f1c40f','#3498db','#e74c3c','#9b59b6','#ecf0f1','#9b59b6'];
+	var socket = io();
+	var playerpositions = {};
+
+	socket.on('plyers',function(ps){
+		playercolors = ps;
+		
+	});
+
+	socket.on('positions',function(ps){
+		playerpositions = ps;
+		playerpos[0] = playerpositions[me][0];
+		playerpos[1] = playerpositions[me][1];
+	});
+
+	socket.on('position',function(id,pos){
+		playerpositions[id] = pos;
+	});
+
+	socket.on('id',function(id){
+		me = id;
+	});
+
+	var c,ctx,columns,rows,squareWidth,squareHeight,b,squares,playerpos;
+	playerpos = [0,0,0];
+	window.onload = function(){
+		playerpos.x = 0;
+		playerpos.y = 0;
+
+		c = document.getElementById('c');
+		c.addEventListener( "keydown", doKeyDown, true);
+		ctx = c.getContext('2d');
+		setInterval(update,1000/30);
+		b = 0;
+		columns = 10;
+		rows = 10;
+		squareWidth = 50;
+		squareHeight = 50;
+		square = [100];
+
+	}
+
+	function doKeyDown(e){
+
+		if ( e.keyCode == 87 ) {
+			if(playerpos[1] > 0){
+				playerpos[1]--;
+			}
+		}
+
+		if ( e.keyCode == 83 ) {
+			if(playerpos[1] < columns-1){
+				playerpos[1]++;
+			}
+		}
+
+		if ( e.keyCode == 65 ) {
+			if(playerpos[0] > 0){
+				playerpos[0]--;
+			}
+		}
+
+		if ( e.keyCode == 68 ) {
+			if(playerpos[0] < rows-1){
+				playerpos[0]++;
+			}
+		}
+
+		socket.emit('changepos',playerpos,me);
+	}
+	var draw = function(){
+
+		ctx.fillStyle = 'black';
+		for(var i = 0; i < columns; i++){
+			for(var j = 0; j < rows; j++){
+				var x = i*50;
+				var y = j*50;
+				
+				ctx.fillStyle = 'black';
+				
+				ctx.fillRect(x,y,x+squareWidth,y+squareHeight);
+
+				
+			}
+		}
+
+		var count =0;
+		for(var p in playerpositions){
+			console.log(p)
+			var x = playerpositions[p][0]*50;
+			var y = playerpositions[p][1]*50;
+
+			ctx.fillStyle = playercolors[count];
+			ctx.fillRect(x,y,50,50);
+
+			count++;
+		}
+	}
+
+	var update = function(){
+		
+		draw();
+		b++;
+		if(b > columns ){
+			b=0;
+		}
+		
+	}
+
+	window.addEventListener('keydown',doKeyDown,true);
+
+
+
+	
+
+
+
+});
+</script>
