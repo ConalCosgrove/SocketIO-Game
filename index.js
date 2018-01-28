@@ -14,7 +14,7 @@ var names = {};
 
 io.on('connection', function(socket){
 	
-	positions[socket.id] = [Math.floor(Math.random()*10),Math.floor(Math.random()*10)];
+	positions[socket.id] = [Math.floor(Math.random()*20),Math.floor(Math.random()*20)];
 	console.log("connection, id = " + socket.id + " Position = "+ positions[socket.id]);
 	socket.emit('id',socket.id);
 	io.emit('position',socket.id,p);

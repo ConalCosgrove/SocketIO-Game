@@ -46,10 +46,10 @@ $(function () {
 		ctx = c.getContext('2d');
 		setInterval(update,1000/30);
 		b = 0;
-		columns = 15;
-		rows = 15;
-		squareWidth = 50;
-		squareHeight = 50;
+		columns = 30;
+		rows = 30;
+		squareWidth = 25;
+		squareHeight = 25;
 		square = [100];
 
 	}
@@ -87,8 +87,8 @@ $(function () {
 		ctx.fillStyle = 'black';
 		for(var i = 0; i < columns; i++){
 			for(var j = 0; j < rows; j++){
-				var x = i*50;
-				var y = j*50;
+				var x = i*squareWidth;
+				var y = j*squareHeight;
 				
 				ctx.fillStyle = 'black';
 				
@@ -101,13 +101,13 @@ $(function () {
 		var count =0;
 		for(var p in playerpositions){
 			
-			var x = playerpositions[p][0]*50;
-			var y = playerpositions[p][1]*50;
-			ctx.font = "20px Arial";
+			var x = playerpositions[p][0]*squareWidth;
+			var y = playerpositions[p][1]*squareHeight;
+			ctx.font = "13px Arial";
 			ctx.fillStyle = 'white';
 			ctx.fillText(playernames[p],x,y);
 			ctx.fillStyle = playercolors[count];
-			ctx.fillRect(x,y,50,50);
+			ctx.fillRect(x,y,squareWidth,squareHeight);
 
 			count++;
 		}
