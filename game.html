@@ -1,4 +1,4 @@
-<canvas id="c" width = "500" height = "500"></canvas>
+<canvas id="c" width = "750" height = "750"></canvas>
 <script src="/socket.io/socket.io.js"></script>
 
 
@@ -7,14 +7,15 @@
 <script>
 $(function () {
 	var me;
+
 	var playercolors = ['#2ecc71','#f1c40f','#3498db','#e74c3c','#9b59b6','#ecf0f1','#9b59b6'];
 	var socket = io();
-	var playerpositions = {};
 
-	socket.on('plyers',function(ps){
-		playercolors = ps;
-		
-	});
+	var myName = prompt("Enter Nickname");
+	socket.emit('name',myName);
+	var playerpositions = {};
+	var playernames = {};
+	
 
 	socket.on('positions',function(ps){
 		playerpositions = ps;
@@ -30,6 +31,10 @@ $(function () {
 		me = id;
 	});
 
+	socket.on('names',function(n){
+		playernames = n;
+	});
+
 	var c,ctx,columns,rows,squareWidth,squareHeight,b,squares,playerpos;
 	playerpos = [0,0,0];
 	window.onload = function(){
@@ -41,8 +46,8 @@ $(function () {
 		ctx = c.getContext('2d');
 		setInterval(update,1000/30);
 		b = 0;
-		columns = 10;
-		rows = 10;
+		columns = 15;
+		rows = 15;
 		squareWidth = 50;
 		squareHeight = 50;
 		square = [100];
@@ -95,10 +100,12 @@ $(function () {
 
 		var count =0;
 		for(var p in playerpositions){
-			console.log(p)
+			
 			var x = playerpositions[p][0]*50;
 			var y = playerpositions[p][1]*50;
-
+			ctx.font = "20px Arial";
+			ctx.fillStyle = 'white';
+			ctx.fillText(playernames[p],x,y);
 			ctx.fillStyle = playercolors[count];
 			ctx.fillRect(x,y,50,50);
 

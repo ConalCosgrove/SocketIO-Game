@@ -8,7 +8,7 @@ app.get('/', function(req, res){
 });
 var colors = ['#2ecc71','#f1c40f','#3498db','#e74c3c','#9b59b6'];
 var positions = {};
-
+var names = {};
 
 
 
@@ -21,12 +21,18 @@ io.on('connection', function(socket){
 
 	socket.emit('players',colors);
 	socket.emit('positions',positions);
+	socket.emit('names',names);
 	io.emit('position',socket.id,positions[socket.id]);
 
 	socket.on('changepos',function(p,id){
 		positions[id] = p;
 		console.log("Player id: " + id + " moved to x: " + p[0] + " y: " + p[1]);
 		io.emit('position',id,p);
+	});
+
+	socket.on('name',function(n){
+		names[socket.id] = n
+		io.emit('names',names);
 	});
 
 	socket.on('disconnect',function(client){
