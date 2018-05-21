@@ -2,9 +2,20 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var fs = require('fs');
+var sjcl = require('sjcl');
+var ht = require('http');
+var request = require('request');
+
+var options = {
+  host: 'www.google.com',
+  port: 80,
+  path: '/index.html'
+};
 
 app.get('/', function(req, res){
-	res.sendFile(__dirname + '/game.html');
+
+	res.sendFile(__dirname + '/game.html')
+
 });
 var colors = ['#2ecc71','#f1c40f','#3498db','#e74c3c','#9b59b6'];
 var positions = {};
@@ -14,15 +25,6 @@ var names = {};
 
 io.on('connection', function(socket){
 	
-	positions[socket.id] = [Math.floor(Math.random()*20),Math.floor(Math.random()*20)];
-	console.log("connection, id = " + socket.id + " Position = "+ positions[socket.id]);
-	socket.emit('id',socket.id);
-	io.emit('position',socket.id,p);
-
-	socket.emit('players',colors);
-	socket.emit('positions',positions);
-	socket.emit('names',names);
-	io.emit('position',socket.id,positions[socket.id]);
 
 	socket.on('changepos',function(p,id){
 		positions[id] = p;
@@ -31,6 +33,17 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('name',function(n){
+	
+		positions[socket.id] = [Math.floor(Math.random()*20),Math.floor(Math.random()*20)];
+		console.log("connection, id = " + socket.id + " Position = "+ positions[socket.id]);
+		socket.emit('id',socket.id);
+		io.emit('position',socket.id,p);
+
+		socket.emit('players',colors);
+		socket.emit('positions',positions);
+		socket.emit('names',names);
+
+		io.emit('position',socket.id,positions[socket.id]);
 		names[socket.id] = n
 		io.emit('names',names);
 	});
@@ -43,7 +56,14 @@ io.on('connection', function(socket){
 	});
 });
 
-var p = process.env.PORT || 3000;
+var p = process.env.PORT || 8000;
 http.listen(p, function(){
   console.log('listening on *:'+p);
 });
+
+
+
+
+
+
+

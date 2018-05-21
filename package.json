@@ -2,15 +2,22 @@
   "name": "onlinegame",
   "version": "0.0.1",
   "description": "Online game test",
-  "main": "index.js",
+  "main": "proxy.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node index.js"
+    "start": "node index.js"
   },
   "author": "Conal Cosgrove",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.17.1",
     "express": "^4.16.2",
-    "socket.io": "^2.0.4"
+    "http-proxy": "^1.16.2",
+    "net": "^1.0.2",
+    "readline": "^1.3.0",
+    "request": "^2.83.0",
+    "sjcl": "^1.0.7",
+    "socket.io": "^2.0.4",
+    "url": "^0.11.0"
   }
 }
